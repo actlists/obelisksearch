@@ -5,6 +5,13 @@
 #include <cmath>
 #include "lifelib/pattern2.h"
 #include "obelisk.h"
+
+int64_t center[2] = CENTER;
+uint64_t stabs[2] = STABS;
+uint64_t period[2] = PERIOD;
+uint64_t maxbbox[2] = MAXBBOX;
+int64_t tile[3] = TILE;
+
 template <typename I>
 apg::pattern rand_pat(apg::lifetree_abstract<I> *lt, apg::pattern &pat, int64_t tile[3], std::string symmetry = "C1") {
     int64_t bbox[4];
@@ -17,31 +24,23 @@ apg::pattern rand_pat(apg::lifetree_abstract<I> *lt, apg::pattern &pat, int64_t 
                 if (pat.getcell(i, j) == 2) {
                     if ((double)(rand() % 1000000) / 1000000. < DENSITY) {
                         p += on(i+h*tile[0], j+h*tile[1]);
-                        if (symmetry == "D2-") {
-                            p += on(i+h*tile[0], 2*bbox[3]-j+h*tile[1]);
-                        } else if (symmetry == "D2|") {
-                            p += on(2*bbox[2]-i+h*tile[0], j+h*tile[1]);
-                        } else if (symmetry == "D4+") {
-                            p += on(i+h*tile[0], 2*bbox[3]-j+h*tile[1]);
-                            p += on(2*bbox[2]-i+h*tile[0], j+h*tile[1]);
-                            p += on(2*bbox[2]-i+h*tile[0], j+h*tile[1]-j+h*tile[1]);
-                        }
                     }
                 } else if (pat.getcell(i, j) == 1) {
                     p += on(i+h*tile[0], j+h*tile[1]);
-                    if (symmetry == "D2-") {
-                        p += on(i+h*tile[0], 2*bbox[3]-j+h*tile[1]);
-                    } else if (symmetry == "D2|") {
-                        p += on(2*bbox[2]-i+h*tile[0], j+h*tile[1]);
-                    } else if (symmetry == "D4+") {
-                        p += on(i+h*tile[0], 2*bbox[3]-j+h*tile[1]);
-                        p += on(2*bbox[2]-i+h*tile[0], j+h*tile[1]);
-                        p += on(2*bbox[2]-i+h*tile[0], j+h*tile[1]-j+h*tile[1]);
-                    }
                 }
             }
         }
     }
+	int64_t bbox2[4];
+	p.getrect(bbox2);
+	if (symmetry == "D2-") {
+		p += p.transform("flip_y", center[0], center[1]);
+	} else if (symmetry == "D2|") {
+		p += p.transform("flip_x", center[0], center[1]);
+	} else if (symmetry == "D4+") {
+		p += p.transform("flip_x", center[0], center[1]);
+		p += p.transform("flip_y", center[0], center[1]);
+	}
     return p;
 }
 
@@ -49,10 +48,6 @@ int main() {
     apg::lifetree<uint32_t, 4> lt(100);
     apg::pattern pat(&lt, PATTERN, RULE);
     int solutions = 0;
-    uint64_t stabs[2] = STABS;
-    uint64_t period[2] = PERIOD;
-    uint64_t maxbbox[2] = MAXBBOX;
-    int64_t tile[3] = TILE;
     bool flag = false;
     while (true) {
         flag = false;
@@ -77,7 +72,7 @@ int main() {
             }
             if (work == work2 and work.totalPopulation() > 0) {
                 if ((p + 1) >= period[0]) {
-                    printf("Pattern found with period %lld\n", p + 1);
+                    printf("#C Pattern found with period %lld\n", p + 1);
                     work.write_rle(std::cout);
 					std::cout << "\n";
                 }
