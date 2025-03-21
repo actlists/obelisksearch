@@ -30,4 +30,4 @@ The settings should be self-explanatory. If you lose the names to the settings, 
 #define STABS {100, 10} // Period stab rate (prevents explosions)
 ```
 
-If your program doesn't work past "Instruction .... detected", then run `add_rule.py RULE` where RULE is the one in your settings file.# obelisksearch
+If your program doesn't work past "Instruction .... detected", then run `add_rule.py RULE` where RULE is the one in your settings file.
