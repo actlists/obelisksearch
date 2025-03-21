@@ -75,7 +75,7 @@ int main() {
             if (work.totalPopulation() > MAXPOP || bbox[2] > maxbbox[0] || bbox[3] > maxbbox[1]) {
                 break;
             }
-            if (work == work2) {
+            if (work == work2 and work.totalPopulation() > 0) {
                 if ((p + 1) >= period[0]) {
                     printf("Pattern found with period %lld\n", p + 1);
                     work.write_rle(std::cout);
