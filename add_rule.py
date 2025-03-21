@@ -1,4 +1,4 @@
-#! usr/bin/python3
+#!/usr/bin/env python3
 
 # If a rule doesn't work, run this script.
 # Usage: ./add_rule.py <rule>
