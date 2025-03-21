@@ -79,6 +79,7 @@ int main() {
                 if ((p + 1) >= period[0]) {
                     printf("Pattern found with period %lld\n", p + 1);
                     work.write_rle(std::cout);
+					std::cout << "\n";
                 }
                 break;
             }
