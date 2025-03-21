@@ -60,20 +60,12 @@ int main() {
         }
         apg::pattern work2(work);
         if (flag) continue;
-        for (long long int p = 0; p < period[1]; p++) {
-            int64_t bbox[4] = {0, 0, 0, 0};
-            work = work.advance(1);
-            work.getrect(bbox);
-            if (work.totalPopulation() > MAXPOP || bbox[2] > maxbbox[0] || bbox[3] > maxbbox[1]) {
-                break;
-            }
-            if (work == work2 and work.totalPopulation() > 0) {
-                if ((p + 1) >= period[0]) {
-                    printf("#C Pattern found with period %lld\n", p + 1);
-                    work.write_rle(std::cout);
-					std::cout << "\n";
-                }
-                break;
+        work.ascertain_period();
+        if (work.dt != 0 and work.totalPopulation() > 0) {
+            if (work.dt >= period[0]) {
+                printf("#C Pattern found with period %ld\n", work.dt);
+                work.write_rle(std::cout);
+				std::cout << "\n";
             }
         }
     }
